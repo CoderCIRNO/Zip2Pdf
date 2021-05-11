@@ -3,11 +3,13 @@ import zipfile
 from PIL import Image
 import os
 import shutil
+import imghdr
 
 failList = []
 
-path = 'D:\\CIRNO\\zips'
-#path = 'test'
+#path = 'D:\\CIRNO\\zips'
+path = 'D:\\Download\\work2'
+accept_type = ['jpg', 'jpeg', 'png']
 
 def makePdf(zipName, pdfFileName, listPages):
 	width = 0
@@ -22,9 +24,10 @@ def makePdf(zipName, pdfFileName, listPages):
 	pdf = FPDF(unit = "pt", format = [width, height])
 	for page in listPages:
 		pdf.add_page()
-		try:
-			pdf.image('temp\\' + page, 0, 0)
-		except:
+		i_type = imghdr.what('temp\\' + page)
+		if i_type in accept_type:
+			pdf.image('temp\\' + page, x = 0, y = 0, w = width, type = i_type)
+		else:
 			print(zip + '生成失败\n')
 			failList.append(zip)
 			return
